@@ -1,0 +1,28 @@
+2024-02-26 20:53:12 - application_logger - INFO - ℹ️ Application Start :
+                ###################################################################################
+                ##                             ULTRA-AIM-PRO                                     ##
+                ##                                                                               ##
+                ##  Ultra96-based  AI-Managed Performance and Reliability Optimization system    ##
+                ##                                                                               ##
+                ##                  Created by: Dark Bors v2.0.1-beta                            ##
+                ##                                                                               ##
+                ##                                                                 Final Project ##
+                ###################################################################################
+                
+2024-02-26 20:53:31 - application_logger - INFO - Starting MainWindow initialization
+2024-02-26 20:53:31 - application_logger - INFO - ℹ️ Initializing the VisualizationPanel.
+2024-02-26 20:53:32 - application_logger - INFO - MainWindow initialized successfully.
+2024-02-26 20:53:35 - application_logger - INFO - ℹ️ File path chosen: G:/My Drive/Final Project Boris_E/final_project/Ultra_Aim_Pro - TEMP/Final Project/utils/DataSet_low.xlsx
+2024-02-26 20:53:35 - application_logger - INFO - ℹ️ Starting preprocessing of data.
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ Data loaded successfully from G:/My Drive/Final Project Boris_E/final_project/Ultra_Aim_Pro - TEMP/Final Project/utils/DataSet_low.xlsx
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ Dropped 1247 rows due to NaN values.
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ Reliability column added successfully.
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ N_squared feature engineered successfully.
+2024-02-26 20:53:36 - application_logger - DEBUG - 🐛 Features and targets extracted.
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ Input data normalized successfully.
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ Data split into train and test sets successfully.
+2024-02-26 20:53:36 - application_logger - INFO - ℹ️ Data preprocessed successfully.
+2024-02-26 20:53:42 - application_logger - INFO - ℹ️ File path chosen: C:/Users/97254/Downloads/ExportToExcel.xlsx
+2024-02-26 20:53:42 - application_logger - INFO - ℹ️ Starting preprocessing of data.
+2024-02-26 20:53:42 - application_logger - INFO - ℹ️ Data loaded successfully from C:/Users/97254/Downloads/ExportToExcel.xlsx
+2024-02-26 20:53:44 - application_logger - CRITICAL - ⛔ An error occurred while loading the data: 'V'
