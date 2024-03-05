@@ -46,7 +46,7 @@ class MainWindow(CTk):
         self.download_image_button.grid(row=1, column=1, pady=10, padx=10)
 
         
-        self.download_analysis_button = CTkButton(self.visualization_tab, text='Download Analysis', command=self.visualization_panel.download_analysis)
+        self.download_analysis_button = CTkButton(self.visualization_tab, text='Download Analysis', command=self.download_analysis)
         self.download_analysis_button.grid(row=2, column=0, pady=10, padx=10)
 
         # Create widgets in the 'Main' tab
@@ -58,25 +58,67 @@ class MainWindow(CTk):
                 
         logger.info("MainWindow initialized successfully.")
 
-    #--------------------Delete ! ! ! ----------------------
-    # def save_analysis_to_doc(self, analysis, file_path):
-    #     # Create a new Document
-    #     doc = Document()
-    #     doc.add_heading('Graph Analysis', 0)
-
-    #     # Add analysis for each graph
-    #     for graph_name, graph_analysis in analysis.items():
-    #         doc.add_heading(graph_name, level=1)
-    #         doc.add_paragraph(graph_analysis)
         
-    #     # Save the document
-    #     doc.save(file_path)
+    def save_analysis_to_doc(self, analysis, file_path):
+        # Create a new Document
+        doc = Document()
+        doc.add_heading('Graph Analysis', 0)
 
+        # Add analysis for each graph
+        for graph_name, graph_analysis in analysis.items():
+            doc.add_heading(graph_name, level=1)
+            doc.add_paragraph(graph_analysis)
+        
+        # Save the document
+        doc.save(file_path)
 
-    # The following method is updated to call download_analysis from VisualizationPanel
     def download_analysis(self):
-        # Call the download_analysis method from the VisualizationPanel instance
-        self.visualization_panel.download_analysis()
+        # This function will be called when the 'Download' button is clicked
+        file_path = filedialog.asksaveasfilename(
+            title='Save Graph Analysis',
+            filetypes=[('Word Documents', '*.docx')],
+            defaultextension='.docx'
+        )
+        if file_path:
+            # Get the analysis data (this is just an example, you will need to provide the actual content)
+            analysis = {
+                'Training & Validation Loss': (
+                    "The training and validation loss graphs show how the model's error decreases over each epoch. "
+                    "The sharp decline in training loss suggests that the model quickly learns to fit the training data. "
+                    "However, the validation loss plateau indicates that improvements in the model's performance on the training data "
+                    "do not translate to equivalent improvements on unseen data. This discrepancy can signal overfitting, "
+                    "where the model learns the training data too well, including its noise and outliers, "
+                    "which does not generalize well to new data."
+                ),
+                'Prediction Accuracy': (
+                    "The prediction accuracy graph shows a scatter plot of the model's predicted reliability against the true reliability values. "
+                    "The cluster of points around the dashed line of perfect prediction indicates that the model has a good level of predictive accuracy. "
+                    "However, there are deviations, especially in higher reliability values, where the model tends to underestimate the reliability. "
+                    "This could suggest that the model may need further tuning to handle higher reliability ranges or that there are factors affecting high reliability that the model is not considering."
+                ),
+                'Impact of N': (
+                    "The graph for the impact of 'N' on reliability shows a spread of predicted versus actual reliability which does not indicate a clear trend. "
+                    "This could imply that 'N' is not a strong predictor for reliability on its own, or that its relationship with reliability is non-linear and possibly influenced by other variables. "
+                    "A more complex model or feature engineering may be needed to capture the true impact of 'N' on reliability."
+                ),
+                'Impact of V': (
+                    "The 'Impact of V' graph presents a vertical clustering of points at specific 'V' values, suggesting a categorical or discrete nature of 'V'. "
+                    "The overlaps of predicted and actual reliability values indicate that the model can capture the effect of 'V' on reliability to some extent. "
+                    "However, there is notable variance in the predictions at the extreme values of 'V', which may require additional investigation."
+                ),
+                'Impact of f': (
+                    "In the 'Impact of f' graph, the distribution of points shows a random pattern, indicating a weak or complex relationship between 'f' and reliability. "
+                    "The model's predictions do not consistently align with the actual values across the range of 'f'. "
+                    "This suggests that 'f' may not be a significant predictor in the current model's form, or it interacts with reliability in a way that the model is currently not capturing."
+                ),
+                'Impact of T': (
+                    "The 'Impact of T' graph depicts a horizontal banding pattern, with the predicted values generally matching the actual reliability across different values of 'T'. "
+                    "This indicates that while 'T' varies, its impact on reliability is not strongly captured by the model. "
+                    "If 'T' is an important factor in theory, the model may need to be reassessed to ensure it can leverage 'T' effectively for prediction."
+                ),
+            }
+
+            self.save_analysis_to_doc(analysis, file_path)
     
 
     def download_for_matlab(self):
@@ -315,3 +357,10 @@ if __name__ == '__main__':
     root = MainWindow()
     root.mainloop()
     logger.info("Application closed")
+	
+	
+	
+	
+	
+	
+	

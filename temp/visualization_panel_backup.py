@@ -9,8 +9,6 @@ from tkinter import Scrollbar, Frame, filedialog
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from app_logging import logger
-from docx import Document
-from scipy.stats import linregress
 
 
 class VisualizationPanel(tk.Frame):
@@ -19,7 +17,7 @@ class VisualizationPanel(tk.Frame):
         self.config(borderwidth=2, relief='sunken')
         logger.info("ℹ️ Initializing the VisualizationPanel.")
         self.master = master
-        
+
         # Set grid weight configurations
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -44,52 +42,8 @@ class VisualizationPanel(tk.Frame):
         # Initialize variables to store figures and canvases
         self.figures = []
         self.canvases = []
-
-    #----------------new part : ---------------
     
-    def download_analysis(self):
-        # This method will handle the button click event to download the analysis
-        file_path = filedialog.asksaveasfilename(
-            title='Save Analysis Document',
-            filetypes=[('Word Documents', '*.docx')],
-            defaultextension='.docx'
-        )
-        if file_path:  # If a file path was selected
-            self.save_analysis_to_doc(file_path)  # Call the method with the file_path
 
-
-    def save_analysis_to_doc(self, file_path):        # Create a new Document
-        doc = Document()
-        doc.add_heading('Graph Analysis', 0)
-
-        # Analysis for the Training & Validation Loss plot
-        train_loss_data = self.figures[0].axes[0].lines[0].get_ydata()
-        val_loss_data = self.figures[0].axes[0].lines[1].get_ydata()
-        epochs = range(len(train_loss_data))  # Assuming epochs are along the x-axis
-        analysis_text = self.analyze_loss_graph(train_loss_data, val_loss_data, epochs)
-        doc.add_heading(f'Figure 1: Training & Validation Loss', level=1)
-        doc.add_paragraph(analysis_text)
-
-        # Analysis for the Prediction Accuracy plot
-        predicted_reliability_data = self.figures[1].axes[0].collections[0].get_offsets().data[:, 1]
-        true_values_data = self.figures[1].axes[0].collections[0].get_offsets().data[:, 0]
-        analysis_text = self.analyze_prediction_accuracy(true_values_data, predicted_reliability_data)
-        doc.add_heading(f'Figure 2: Prediction Accuracy', level=1)
-        doc.add_paragraph(analysis_text)
-
-        # Analysis for the Impact of Features (N, V, f, T) plots
-        for i, feature_name in enumerate(['N', 'V', 'f', 'T']):
-            feature_data = self.figures[2].axes[i].collections[0].get_offsets().data[:, 0]
-            reliability_data = self.figures[2].axes[i].collections[0].get_offsets().data[:, 1]
-            analysis_text = self.analyze_feature_impact(feature_data, reliability_data, feature_name)
-            doc.add_heading(f'Figure 3: Impact of {feature_name}', level=1)
-            doc.add_paragraph(analysis_text)
-
-        # Save the document
-        doc.save(file_path)
-                
-    #------------end of new part ! ------------
-    
     def on_frame_configure(self, event=None):
         # Reset the scroll region to encompass the inner frame
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
@@ -196,50 +150,11 @@ class VisualizationPanel(tk.Frame):
                     data[f'figure_{idx}_{label}_y'] = y_data
         return data
 
-    #----------------------Start new part: ----------------------
-    def analyze_loss_graph(self, train_loss, val_loss, epochs):
-        # Analyze the trend of the loss values over epochs
-        final_train_loss = train_loss[-1]
-        final_val_loss = val_loss[-1]
-        analysis_text = (
-            f"The training loss starts at {train_loss[0]:.4f} and ends at {final_train_loss:.4f} over {len(epochs)} epochs, "
-            f"while the validation loss starts at {val_loss[0]:.4f} and ends at {final_val_loss:.4f}. "
-            "This suggests that the model is learning from the training data. "
-            f"{'However, ' if final_val_loss > val_loss[0] else ''}The validation loss "
-            f"{'increased' if final_val_loss > val_loss[0] else 'decreased'} over time, "
-            f"which {'may indicate overfitting.' if final_val_loss > val_loss[0] else 'indicates good generalization.'}"
-        )
-        return analysis_text
-
-    def analyze_prediction_accuracy(self, y_true, y_pred):
-        # Perform linear regression analysis for predicted vs actual reliability
-        slope, intercept, r_value, p_value, std_err = linregress(y_true, y_pred)
-        analysis_text = (
-            f"The model's predictions have a correlation coefficient (R) of {r_value:.2f}, "
-            f"indicating {'a strong' if abs(r_value) > 0.5 else 'a weak'} linear relationship with the true values. "
-            f"The coefficient of determination (R^2) is {r_value**2:.3f}, "
-            f"which measures the proportion of variance in the dependent variable that is predictable from the independent variable.\n"
-        )
-        return analysis_text
-
-    def analyze_feature_impact(self, x_data, y_data, feature_name):
-        # Simple correlation for feature impact
-        correlation = np.corrcoef(x_data, y_data)[0, 1]
-        analysis_text = (
-            f"The impact of feature '{feature_name}' on reliability shows a correlation of {correlation:.2f}. "
-            f"This {'suggests' if abs(correlation) > 0.5 else 'does not suggest'} a strong linear relationship."
-        )
-        return analysis_text
-
-    #------------------End new part  !  !  ! -------------------
-
     def save_graphs_for_matlab(self, file_path):
         # Save the graph data to a MATLAB .mat file
         data = self.get_graph_data()
-        logger.debug("🐛data is:", data)  # Debug print, you may want to remove this after fixing the issue
+        print("data is:", data)
         scipy.io.savemat(file_path, data)
-
-
 
     def save_graphs_as_image(self, file_path, fig):
         # Save the graph as an image
