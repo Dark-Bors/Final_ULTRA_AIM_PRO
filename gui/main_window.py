@@ -58,20 +58,6 @@ class MainWindow(CTk):
                 
         logger.info("MainWindow initialized successfully.")
 
-    #--------------------Delete ! ! ! ----------------------
-    # def save_analysis_to_doc(self, analysis, file_path):
-    #     # Create a new Document
-    #     doc = Document()
-    #     doc.add_heading('Graph Analysis', 0)
-
-    #     # Add analysis for each graph
-    #     for graph_name, graph_analysis in analysis.items():
-    #         doc.add_heading(graph_name, level=1)
-    #         doc.add_paragraph(graph_analysis)
-        
-    #     # Save the document
-    #     doc.save(file_path)
-
 
     # The following method is updated to call download_analysis from VisualizationPanel
     def download_analysis(self):
@@ -159,8 +145,7 @@ class MainWindow(CTk):
             self.visualization_panel.save_graphs_for_matlab(file_path)
 
 
-    
-    
+       
     def create_sliders_in_main_tab(self):
         # Define the parameters for the sliders
         slider_params = [
